@@ -1,0 +1,10 @@
+dn: uid=sasuser,ou=users,dc=test,dc=com
+cn: SAS User
+sn: SAS User
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /home/sasuser
+uidNumber: 2378
+gidNumber: 8000
+uid: sasuser
+userPassword: sasuser

@@ -1,0 +1,11 @@
+dn: uid=viyauser1,ou=users,dc=test,dc=com
+cn: Viya Demo User 1
+sn: Viya Demo User 1
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /home/viyauser1
+uidNumber: 501
+gidNumber: 8000
+uid: viyauser1
+userPassword: viyauser1
+

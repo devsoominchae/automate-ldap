@@ -1,0 +1,7 @@
+dn: cn=Viya Test Group,ou=groups,dc=test,dc=com
+objectClass: posixGroup
+gidNumber: 8000
+cn: Viya Test Group
+memberUid: viyauser1
+memberUid: viyauser2
+

@@ -1,0 +1,6 @@
+dn: cn=SAS User Group,ou=groups,dc=test,dc=com
+objectClass: posixGroup
+gidNumber: 8001
+cn: SAS User Group
+memberUid: sasuser
+

@@ -1,0 +1,6 @@
+dn: dc=test,dc=com
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: development
+dc: test
