@@ -1,12 +1,52 @@
 #!/bin/bash
 
+# Function to detect and use the correct package manager
+install_package() {
+    PACKAGE_NAME="$1"
+
+    if command -v dnf >/dev/null 2>&1; then
+        echo "Using dnf to install $PACKAGE_NAME"
+        sudo dnf install -y "$PACKAGE_NAME"
+    elif command -v yum >/dev/null 2>&1; then
+        echo "Using yum to install $PACKAGE_NAME"
+        sudo yum install -y "$PACKAGE_NAME"
+    elif command -v apt >/dev/null 2>&1; then
+        echo "Using apt to install $PACKAGE_NAME"
+        sudo apt update
+        sudo apt install -y "$PACKAGE_NAME"
+    else
+        echo "No supported package manager found (dnf, yum, apt)."
+        exit 1
+    fi
+}
+
+remove_package() {
+    PACKAGE_NAME="$1"
+
+    if command -v dnf >/dev/null 2>&1; then
+        echo "Using dnf to remove $PACKAGE_NAME"
+        sudo dnf remove -y "$PACKAGE_NAME"
+    elif command -v yum >/dev/null 2>&1; then
+        echo "Using yum to remove $PACKAGE_NAME"
+        sudo yum remove -y "$PACKAGE_NAME"
+    elif command -v apt >/dev/null 2>&1; then
+        echo "Using apt to remove $PACKAGE_NAME"
+        sudo apt remove -y "$PACKAGE_NAME"
+    else
+        echo "No supported package manager found (dnf, yum, apt)."
+        exit 1
+    fi
+}
+
 echo "Installing expect..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =  
-sudo yum install expect -y
+install_package "expect"
 
 echo "Removing LDAP package..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =  
-sudo yum remove openldap-servers openldap-clients -y 
+
+remove_package "openldap-servers"
+remove_package "openldap-clients"
 
 echo "Removing previous LDAP configurations..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' = 
@@ -14,7 +54,10 @@ sudo rm -rf /etc/*ldap*
 
 echo "Installing LDAP..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' = 
-sudo yum install openldap-servers openldap-clients -y 
+
+install_package "openldap-servers"
+install_package "openldap-clients"
+
 sudo systemctl start slapd.service 
 sudo systemctl enable slapd.service 
 
