@@ -38,6 +38,10 @@ remove_package() {
     fi
 }
 
+echo "Adding repo for OpenLDAP..."
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =  
+sudo curl -sSL https://repo.symas.com/configs/SOFL/rhel8/sofl.repo -o /etc/yum.repos.d/sofl.repo
+
 echo "Installing expect..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =  
 install_package "expect"
@@ -58,8 +62,8 @@ printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =
 install_package "openldap-servers"
 install_package "openldap-clients"
 
-sudo systemctl start slapd.service 
-sudo systemctl enable slapd.service 
+sudo systemctl start slapd
+sudo systemctl enable slapd
 
 echo "Performing initial setup..."
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' = 
