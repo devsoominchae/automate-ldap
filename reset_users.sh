@@ -1,30 +1,52 @@
 #!/bin/bash
 
-# LDAP admin credentials
-BIND_DN="cn=ldap,dc=test,dc=com"
+read -s -p "Enter your LDAP server password: " ldap_password
+echo
 
-ldapsearch -LLL -x -D "$BIND_DN" -W -b "ou=users,dc=test,dc=com" dn | \
-grep "^dn: uid" | sed "s/^dn: //" | \
-while read dn; do
-  echo "Deleting $dn"
-  ldapdelete -x -D "$BIND_DN" -W "$dn"
-done
+# Delete users OU
+expect <<EOF
+set timeout 10
 
-for LDIF_FILE in ~/ldap/users/*.ldif; do
-    # Extract the DN from the LDIF file
+spawn ldapdelete -x -D "$BIND_DN" -W -r "ou=users,dc=$DC_DOMAIN,dc=$DC_TLD"
+expect "Enter LDAP Password:"
+send "$ldap_password\r"
+expect eof
+EOF
+
+# Add users base
+expect <<EOF
+set timeout 10
+
+spawn ldapadd -x -D "$BIND_DN" -W -f "./setup/users.ldif"
+expect "Enter LDAP Password:"
+send "$ldap_password\r"
+expect eof
+EOF
+
+# Add each group LDIF
+for LDIF_FILE in ./users/*.ldif; do
+    sed -i "s|^\(dn: uid=.*ou=users,\).*|\\1dc=$DC_DOMAIN,dc=$DC_TLD|" $LDIF_FILE
     DN=$(grep -m 1 '^dn:' "$LDIF_FILE" | cut -d ' ' -f 2-)
-    
-    # Print which user we are deleting
-    echo "Adding user: $DN from $LDIF_FILE"
-    
-    # Run ldapdelete command to delete the entry
-    ldapadd -x -D "$BIND_DN" -W -f $LDIF_FILE
-    
-    if [ $? -eq 0 ]; then
-        echo "Successfully Added $DN"
-    else
-        echo "Failed to add $DN"
-    fi
+
+    echo "Adding: $DN"
+
+    expect <<EOF
+set timeout 10
+
+spawn ldapadd -x -D "$BIND_DN" -W -f "$LDIF_FILE"
+expect "Enter LDAP Password:"
+send "$ldap_password\r"
+expect eof
+EOF
+
 done
 
-ldapsearch -x -D "cn=ldap,dc=test,dc=com" -W -b "dc=test,dc=com"
+# Final search
+expect <<EOF
+set timeout 10
+
+spawn ldapsearch -x -D "$BIND_DN" -W -b "dc=$DC_DOMAIN,dc=$DC_TLD"
+expect "Enter LDAP Password:"
+send "$ldap_password\r"
+expect eof
+EOF

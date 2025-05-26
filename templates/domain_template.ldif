@@ -1,22 +1,22 @@
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcSuffix
-olcSuffix: dc=setup,dc=com
+olcSuffix: dc=$DC_DOMAIN,dc=$DC_TLD
 
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcRootDN
-olcRootDN: cn=admin,dc=setup,dc=com
+olcRootDN: cn=$CN_NAME,dc=$DC_DOMAIN,dc=$DC_TLD
 
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcRootPW
-olcRootPW: {SSHA}4AQIoQGNwhVMRyVvPaLE+gNZRSMIfK15
+olcRootPW: {SSHA}3FgB+p692bPlmkESG8ayAymRgNQHXQXN
 
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcAccess
 olcAccess: {0}to attrs=userPassword,shadowLastChange by
-  dn="cn=admin,dc=setup,dc=com" write by anonymous auth by self write by * none
+  dn="cn=$CN_NAME,dc=$DC_DOMAIN,dc=$DC_TLD" write by anonymous auth by self write by * none
 olcAccess: {1}to dn.base="" by * read
-olcAccess: {2}to * by dn="cn=admin,dc=setup,dc=com" write by * read
+olcAccess: {2}to * by dn="cn=$CN_NAME,dc=$DC_DOMAIN,dc=$DC_TLD" write by * read

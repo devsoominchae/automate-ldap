@@ -1,4 +1,4 @@
-dn: cn=Viya Test Group,ou=groups,dc=test,dc=com
+dn: cn=Viya Test Group,ou=groups,dc=setup,dc=com
 objectClass: posixGroup
 gidNumber: 8000
 cn: Viya Test Group

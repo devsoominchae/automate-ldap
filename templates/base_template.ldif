@@ -1,6 +1,6 @@
-dn: dc=setup,dc=com
+dn: dc=$DC_DOMAIN,dc=$DC_TLD
 objectClass: top
 objectClass: dcObject
 objectclass: organization
 o: development
-dc: setup
+dc: $DC_DOMAIN

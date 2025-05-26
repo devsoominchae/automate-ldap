@@ -1,4 +1,4 @@
-dn: cn=SAS User Group,ou=groups,dc=test,dc=com
+dn: cn=SAS User Group,ou=groups,dc=setup,dc=com
 objectClass: posixGroup
 gidNumber: 8001
 cn: SAS User Group

@@ -1,4 +1,4 @@
-dn: uid=sasuser,ou=users,dc=test,dc=com
+dn: uid=sasuser,ou=users,dc=setup,dc=com
 cn: SAS User
 sn: SAS User
 objectClass: person

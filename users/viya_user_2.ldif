@@ -1,4 +1,4 @@
-dn: uid=viyauser2,ou=users,dc=test,dc=com
+dn: uid=viyauser2,ou=users,dc=setup,dc=com
 cn: Viya Demo User 2
 sn: Viya Demo User 2
 objectClass: person
