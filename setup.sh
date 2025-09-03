@@ -82,6 +82,7 @@ export CN_NAME
 echo
 
 export BIND_DN="cn=$CN_NAME,dc=$DC_DOMAIN,dc=$DC_TLD"
+echo "BIND DN: $BIND_DN"
 
 envsubst < ./templates/base_template.ldif > ./setup/base.ldif
 envsubst < ./templates/domain_template.ldif > ./setup/domain.ldif
