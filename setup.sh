@@ -71,18 +71,32 @@ printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' =
 read -s -p "Enter your LDAP server password: " ldap_password
 echo
 
+sed -i '/### LDAP CONFIG START ###/,/### LDAP CONFIG END ###/d' ~/.bashrc
+
+
 read -p "Enter your LDAP DC Domain: " DC_DOMAIN
-export DC_DOMAIN
-
 read -p "Enter your LDAP DC TLD: " DC_TLD
-export DC_TLD
-
 read -p "Enter your LDAP CN Name: " CN_NAME
-export CN_NAME
-echo
 
+# Export variables for current session
+export DC_DOMAIN="$DC_DOMAIN"
+export DC_TLD="$DC_TLD"
+export CN_NAME="$CN_NAME"
 export BIND_DN="cn=$CN_NAME,dc=$DC_DOMAIN,dc=$DC_TLD"
-echo "BIND DN: $BIND_DN"
+
+# Append to ~/.bashrc for persistence
+{
+    echo "### LDAP CONFIG START ###"
+    echo "export DC_DOMAIN=\"$DC_DOMAIN\""
+    echo "export DC_TLD=\"$DC_TLD\""
+    echo "export CN_NAME=\"$CN_NAME\""
+    echo "export BIND_DN=\"$BIND_DN\""
+    echo "### LDAP CONFIG END ###"
+} >> ~/.bashrc
+
+# Reload bashrc
+source ~/.bashrc
+
 
 envsubst < ./templates/base_template.ldif > ./setup/base.ldif
 envsubst < ./templates/domain_template.ldif > ./setup/domain.ldif
